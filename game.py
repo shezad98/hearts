@@ -18,11 +18,6 @@ class Card:
     def __repr__(self):
         return self.__str__()
 
-    # def __lt__(self, other):
-    #     value_order = {'2': 1, '3': 2, '4': 3, '5': 4, '6': 5, '7': 6, '8': 7, '9': 8, '10': 9,
-    #                    'J': 10, 'Q': 11, 'K': 12, 'A': 13}
-    #     return value_order[self.value] < value_order[other.value]
-
     def __eq__(self, other):
         if isinstance(other, Card):
             return self.suit == other.suit and self.value == other.value and self.player == other.player
@@ -82,14 +77,23 @@ class Trick:
 
     def __str__(self):
         suit_string = self.suit if self.suit else 'No suit'
-        # trick_string = ','.join([card.__str__() for card in self.cards])
         return str(self.cards) + suit_string
+
+
+def sort_hand(hand):
+    def order(card):
+        suit_order = {'H': 1, 'S': 2, 'D': 3, 'C': 4}
+        value_order = {'2': 1, '3': 2, '4': 3, '5': 4, '6': 5, '7': 6, '8': 7,
+                       '9': 8, '10': 9, 'J': 10, 'Q': 11, 'K': 12, 'A': 13}
+        return suit_order[card.suit] * 13 + value_order[card.value]
+
+    return sorted(hand, key=order)
 
 
 class Player:
     def __init__(self, player_number, player_hand, player_score):
         self.player_number = player_number
-        self.hand = player_hand
+        self.hand = sort_hand(player_hand)
         self.tricks = []
         self.score = player_score
 
